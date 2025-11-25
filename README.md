@@ -37,7 +37,8 @@ The prototype includes:
 
 ## Demo Screenshot
 
-> (Screenshot to be added after MVP implementation.)
+<img width="2804" height="2280" alt="Screenshot 2025-11-25 at 09-42-23 Loyalty Redemption Value Checker" src="https://github.com/user-attachments/assets/2f755022-7b88-4129-b90b-410c171d04a6" />
+
 
 ---
 
@@ -122,7 +123,7 @@ https://github.com/rtfenter/loyalty-series
 
 ## Status  
 
-MVP design defined.  
+MVP is implemented and active.  
 Frontend implementation in progress — this prototype will remain intentionally lightweight and focused on detecting and explaining redemption value drift, not on modeling full catalog and liability behavior.
 
 ---
