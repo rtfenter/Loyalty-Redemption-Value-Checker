@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Loyalty Redemption Value Checker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="page-header">
+    <div class="page-header-inner">
+      <h1>Loyalty Redemption Value Checker</h1>
+      <p class="tagline">
+        Check whether the same redemption feels fair across regions and partners.
+      </p>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- LEFT: INPUT PANEL -->
+    <section class="panel panel-input">
+      <div class="panel-header">
+        <h2>Inputs</h2>
+        <div class="panel-actions">
+          <button id="load-example" class="btn btn-secondary">Load Example Scenario</button>
+        </div>
+      </div>
+
+      <p class="help-text">
+        Define a reward, its points cost, and any co-pays. Choose two regions, FX, and a partner,
+        then click <strong>Run Integrity Check</strong> to see if value parity holds.
+      </p>
+
+      <div class="field">
+        <label for="base-point-value">Base Point Value (per point, base currency)</label>
+        <input
+          id="base-point-value"
+          type="number"
+          min="0"
+          step="0.0001"
+          value="0.01"
+        />
+        <p class="help-text">
+          Example: 0.01 = 1 cent per point in the program's base currency (e.g., USD).
+        </p>
+      </div>
+
+      <div class="field">
+        <label for="reward-name">Reward Name</label>
+        <input
+          id="reward-name"
+          type="text"
+          placeholder="Free Night, $50 Voucher, etc."
+        />
+      </div>
+
+      <div class="field">
+        <label for="points-cost">Points Cost (same points price across regions)</label>
+        <input
+          id="points-cost"
+          type="number"
+          min="0"
+          step="1"
+          placeholder="20000"
+        />
+      </div>
+
+      <div class="field">
+        <label for="partner">Partner</label>
+        <select id="partner" class="select">
+          <option value="GSTAY" selected>GlobalStay Hotels</option>
+          <option value="MART">MetroMart Retail</option>
+          <option value="STREAM">StreamFlix Media</option>
+        </select>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="field">
+        <label>Region A</label>
+        <select id="region-a" class="select">
+          <option value="US" selected>United States (USD)</option>
+          <option value="EU">Europe (EUR)</option>
+          <option value="UK">United Kingdom (GBP)</option>
+          <option value="JP">Japan (JPY)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="fx-a">Region A FX (1 local = X base currency)</label>
+        <input
+          id="fx-a"
+          type="number"
+          min="0"
+          step="0.0001"
+          placeholder="1.00"
+        />
+        <p class="help-text">
+          Example: if base is USD and region is EUR, 1 EUR ≈ 1.10 USD.
+        </p>
+      </div>
+
+      <div class="field">
+        <label for="copay-a">Region A Co-Pay (local currency)</label>
+        <input
+          id="copay-a"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="50.00"
+        />
+      </div>
+
+      <hr class="divider" />
+
+      <div class="field">
+        <label>Region B</label>
+        <select id="region-b" class="select">
+          <option value="EU" selected>Europe (EUR)</option>
+          <option value="US">United States (USD)</option>
+          <option value="UK">United Kingdom (GBP)</option>
+          <option value="JP">Japan (JPY)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="fx-b">Region B FX (1 local = X base currency)</label>
+        <input
+          id="fx-b"
+          type="number"
+          min="0"
+          step="0.0001"
+          placeholder="1.10"
+        />
+      </div>
+
+      <div class="field">
+        <label for="copay-b">Region B Co-Pay (local currency)</label>
+        <input
+          id="copay-b"
+          type="number"
+          min="0"
+          step="0.01"
+          placeholder="0.00"
+        />
+      </div>
+
+      <div class="panel-footer">
+        <button id="runBtn" class="btn btn-primary">Run Integrity Check</button>
+        <span id="calc-status" class="parse-status" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <!-- RIGHT: VALUE INTEGRITY PANEL -->
+    <section class="panel panel-results">
+      <div class="panel-header">
+        <h2>Redemption Value Overview</h2>
+      </div>
+
+      <div id="summary" class="summary">
+        <div id="summary-badge" class="summary-badge summary-badge-idle">
+          No analysis yet.
+        </div>
+        <p id="summary-text" class="summary-text">
+          Enter a reward and two regions to see whether redemption value stays fair — or drifts.
+        </p>
+      </div>
+
+      <div class="points-grid">
+        <div class="points-card">
+          <h3>Reward Snapshot</h3>
+          <p id="reward-line" class="points-line muted">
+            Points cost, base point value, and implied base value will appear here.
+          </p>
+        </div>
+
+        <div class="points-card">
+          <h3>Region A View</h3>
+          <p id="region-a-line" class="points-line muted">
+            Region A’s effective reward value will appear here.
+          </p>
+        </div>
+
+        <div class="points-card">
+          <h3>Region B View</h3>
+          <p id="region-b-line" class="points-line muted">
+            Region B’s effective reward value will appear here.
+          </p>
+        </div>
+      </div>
+
+      <div class="flow-diagram">
+        <h3>Comparison Path</h3>
+        <pre id="flow-path">No analysis yet.</pre>
+      </div>
+
+      <div class="raw-output">
+        <h3>Calculation Details</h3>
+        <pre id="raw-output">No analysis yet.</pre>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <p>
+      Part of the
+      <a href="https://github.com/rtfenter/loyalty-series" target="_blank" rel="noreferrer">
+        Loyalty Systems Series
+      </a>.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
